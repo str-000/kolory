@@ -28,10 +28,10 @@ public class PorownanieJasnosci {
         float Y1 = (float) (0.2126 * sRGBtoLin(vR1) + 0.7152 * sRGBtoLin(vG1) + 0.0722 * sRGBtoLin(vB1));
         float Y2 = (float) (0.2126 * sRGBtoLin(vR2) + 0.7152 * sRGBtoLin(vG2) + 0.0722 * sRGBtoLin(vB2));
 
-        System.out.printf("luminancja pierwszego koloru: [ %f ] luminancja drugiego koloru: [ %f ]\n", Y1,Y2);
+        System.out.printf("luminancja pierwszego koloru: [ %f ] luminancja drugiego koloru: [ %f ]\n", Y1, Y2);
 
-        if (Y1 > Y2) System.out.printf("jaśniejszy jest kolor pierwszy. róźnica wynosi: %f\n", Y1-Y2);
-        else if (Y1 < Y2) System.out.printf("jaśniejszy jest kolor drugi. róźnica wynosi: %f\n", Y2-Y1);
+        if (Y1 > Y2) System.out.printf("jaśniejszy jest kolor pierwszy. róźnica wynosi: [ %f ]\n", Y1 - Y2);
+        else if (Y1 < Y2) System.out.printf("jaśniejszy jest kolor drugi. róźnica wynosi: [ %f ] \n", Y2 - Y1);
         else System.out.print("oba kolory są tak samo jasne\n");
 
         // -------------------------------------------
@@ -39,7 +39,7 @@ public class PorownanieJasnosci {
         Color secColorRGB = new Color(sec.R, sec.G, sec.B);
 
         Color red = new Color(255, 0, 0);
-        Color green = new Color(0,255, 0);
+        Color green = new Color(0, 255, 0);
         Color blue = new Color(0, 0, 255);
         Color yellow = new Color(255, 255, 0);
         Color purple = new Color(255, 0, 255);
@@ -47,13 +47,21 @@ public class PorownanieJasnosci {
         Color black = new Color(0, 0, 0);
         Color white = new Color(255, 255, 255);
 
-        int rgbDistance = Math.abs(firstColorRGB.getRed() - red.getRed() + Math.abs(firstColorRGB.getGreen() - red.getGreen()) + Math.abs(firstColorRGB.getBlue() - red.getBlue()));
+        Color[] colorList = {red, green, blue, yellow, purple, grey, black, white};
+        Integer[] helpingArray = new Integer[colorList.length];
 
-        // -------------------------------------------
-        BufferedImage img1 = colorImage(ImageIO.read(new File("img/blank.png")),first.R,first.G,first.B);
+        for (int i = 0; i < colorList.length; i++) {
+            int rgbDistance = Math.abs(firstColorRGB.getRed() - colorList[i].getRed() + Math.abs(firstColorRGB.getGreen() - colorList[i].getGreen()) + Math.abs(firstColorRGB.getBlue() - colorList[i].getBlue()));
+            helpingArray[i] = rgbDistance;
+        }
+
+        System.out.println(min(helpingArray));
+
+            // -------------------------------------------
+            BufferedImage img1 = colorImage(ImageIO.read(new File("img/blank.png")), first.R, first.G, first.B);
         ImageIO.write(img1, "png", new File("img/firstImgColor.png"));
 
-        BufferedImage img2 = colorImage(ImageIO.read(new File("img/blank.png")),sec.R,sec.G,sec.B);
+        BufferedImage img2 = colorImage(ImageIO.read(new File("img/blank.png")), sec.R, sec.G, sec.B);
         ImageIO.write(img2, "png", new File("img/secImgColor.png"));
 
     }
@@ -101,6 +109,17 @@ public class PorownanieJasnosci {
             }
         }
         return image;
+    }
+
+    public int min(Integer[] array) {
+        int min = array[0];
+
+        for(int i=0; i<array.length; i++ ) {
+            if(array[i]<min) {
+                min = array[i];
+            }
+        }
+        return min;
     }
 
 }
