@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class PorownanieJasnosci {
     public PorownanieJasnosci(KolorRGB first, KolorRGB sec) throws IOException {
@@ -38,27 +39,35 @@ public class PorownanieJasnosci {
         Color firstColorRGB = new Color(first.R, first.G, first.B);
         Color secColorRGB = new Color(sec.R, sec.G, sec.B);
 
-        Color red = new Color(255, 0, 0);
-        Color green = new Color(0, 255, 0);
-        Color blue = new Color(0, 0, 255);
-        Color yellow = new Color(255, 255, 0);
-        Color purple = new Color(255, 0, 255);
-        Color grey = new Color(128, 128, 128);
-        Color black = new Color(0, 0, 0);
-        Color white = new Color(255, 255, 255);
+        Color red = new Color(255, 0, 0);       String redString = "czerwony";
+        Color green = new Color(0, 255, 0);     String greenString = "zielony";
+        Color blue = new Color(0, 0, 255);      String blueString = "niebieski";
+        Color yellow = new Color(255, 255, 0);  String yellowString = "źółty";
+        Color purple = new Color(255, 0, 255);  String purpleString = "purpurowy";
+        Color grey = new Color(128, 128, 128);  String greyString = "szary";
+        Color black = new Color(0, 0, 0);       String blackString = "czarny";
+        Color white = new Color(255, 255, 255); String whiteString = "biały";
+
 
         Color[] colorList = {red, green, blue, yellow, purple, grey, black, white};
+        String[] colorListNames = {redString, greenString, blueString, yellowString, purpleString, greyString, blackString, whiteString};
         Integer[] helpingArray = new Integer[colorList.length];
 
         for (int i = 0; i < colorList.length; i++) {
-            int rgbDistance = Math.abs(firstColorRGB.getRed() - colorList[i].getRed() + Math.abs(firstColorRGB.getGreen() - colorList[i].getGreen()) + Math.abs(firstColorRGB.getBlue() - colorList[i].getBlue()));
+            int rgbDistance = Math.abs(firstColorRGB.getRed() - colorList[i].getRed()
+                    + Math.abs(firstColorRGB.getGreen() - colorList[i].getGreen())
+                    + Math.abs(firstColorRGB.getBlue() - colorList[i].getBlue()));
             helpingArray[i] = rgbDistance;
         }
 
-        System.out.println(min(helpingArray));
+        int smallestOfHelpingArray = java.util.Arrays.asList(helpingArray).indexOf(min(helpingArray));
+        String firstColorName = String.valueOf(colorListNames[smallestOfHelpingArray]);
 
-            // -------------------------------------------
-            BufferedImage img1 = colorImage(ImageIO.read(new File("img/blank.png")), first.R, first.G, first.B);
+        System.out.println(Arrays.toString(helpingArray));
+        System.out.println(firstColorName);
+
+        // -------------------------------------------
+        BufferedImage img1 = colorImage(ImageIO.read(new File("img/blank.png")), first.R, first.G, first.B);
         ImageIO.write(img1, "png", new File("img/firstImgColor.png"));
 
         BufferedImage img2 = colorImage(ImageIO.read(new File("img/blank.png")), sec.R, sec.G, sec.B);
