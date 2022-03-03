@@ -29,12 +29,6 @@ public class PorownanieJasnosci {
         float Y1 = (float) (0.2126 * sRGBtoLin(vR1) + 0.7152 * sRGBtoLin(vG1) + 0.0722 * sRGBtoLin(vB1));
         float Y2 = (float) (0.2126 * sRGBtoLin(vR2) + 0.7152 * sRGBtoLin(vG2) + 0.0722 * sRGBtoLin(vB2));
 
-        System.out.printf("luminancja pierwszego koloru: [ %f ] luminancja drugiego koloru: [ %f ]\n", Y1, Y2);
-
-        if (Y1 > Y2) System.out.printf("jaśniejszy jest kolor pierwszy. róźnica wynosi: [ %f ]\n", Y1 - Y2);
-        else if (Y1 < Y2) System.out.printf("jaśniejszy jest kolor drugi. róźnica wynosi: [ %f ] \n", Y2 - Y1);
-        else System.out.print("oba kolory są tak samo jasne\n");
-
         // -------------------------------------------
         Color firstColorRGB = new Color(first.R, first.G, first.B);
         Color secColorRGB = new Color(sec.R, sec.G, sec.B);
@@ -51,8 +45,11 @@ public class PorownanieJasnosci {
 
         Color[] colorList = {red, green, blue, yellow, purple, grey, black, white};
         String[] colorListNames = {redString, greenString, blueString, yellowString, purpleString, greyString, blackString, whiteString};
-        Integer[] helpingArray = new Integer[colorList.length];
 
+        String firstColorName = colorName(colorList,firstColorRGB,colorListNames);
+        String secColorName = colorName(colorList,secColorRGB,colorListNames);
+
+        /*Integer[] helpingArray = new Integer[colorList.length];
         for (int i = 0; i < colorList.length; i++) {
             int rgbDistance = Math.abs(firstColorRGB.getRed() - colorList[i].getRed()
                     + Math.abs(firstColorRGB.getGreen() - colorList[i].getGreen())
@@ -61,10 +58,14 @@ public class PorownanieJasnosci {
         }
 
         int smallestOfHelpingArray = java.util.Arrays.asList(helpingArray).indexOf(min(helpingArray));
-        String firstColorName = String.valueOf(colorListNames[smallestOfHelpingArray]);
+        String firstColorName = String.valueOf(colorListNames[smallestOfHelpingArray]);*/
 
-        System.out.println(Arrays.toString(helpingArray));
-        System.out.println(firstColorName);
+        // -------------------------------------------
+        System.out.printf("luminancja pierwszego koloru: [ %s ] [ %f ] luminancja drugiego koloru: [ %s ] [ %f ]\n", firstColorName, Y1, secColorName, Y2);
+
+        if (Y1 > Y2) System.out.printf("jaśniejszy jest kolor [ %s ] pierwszy. róźnica wynosi: [ %f ]\n", firstColorName, Y1 - Y2);
+        else if (Y1 < Y2) System.out.printf("jaśniejszy jest kolor [ %s ] drugi. róźnica wynosi: [ %f ] \n", secColorName, Y2 - Y1);
+        else System.out.print("oba kolory są tak samo jasne\n");
 
         // -------------------------------------------
         BufferedImage img1 = colorImage(ImageIO.read(new File("img/blank.png")), first.R, first.G, first.B);
@@ -129,6 +130,19 @@ public class PorownanieJasnosci {
             }
         }
         return min;
+    }
+
+    public String colorName(Color[] colorList, Color firstColorRGB, String[] colorListNames) {
+        String colorName = null;
+        for (int i = 0; i < colorList.length; i++) {
+            if ((firstColorRGB.getRed() == colorList[i].getRed()) &&
+                    (firstColorRGB.getGreen() == colorList[i].getGreen()) &&
+                    (firstColorRGB.getBlue() == colorList[i].getBlue())) {
+                colorName = colorListNames[i];
+                break;
+            }
+        }
+        return colorName;
     }
 
 }
